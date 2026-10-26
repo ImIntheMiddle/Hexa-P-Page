@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hexa-P: Physical Plausibility-aware Pre-training for Pedestrian Path Prediction</title>
+  <meta name="description" content="Project page of Hexa-P: Physical Plausibility-aware Pre-training for Pedestrian Path Prediction (Pattern Analysis and Applications, 2026)">
+  <meta property="og:title" content="Hexa-P (Pattern Analysis and Applications 2026)">
+  <meta property="og:description" content="Physical Plausibility-aware Pre-training for Pedestrian Path Prediction">
+  <meta property="og:url" content="https://iminthemiddle.github.io/Hexa-P-Page/">
+  <meta property="og:image" content="https://iminthemiddle.github.io/Hexa-P-Page/static/images/overview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/hexap.css">
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/results/data.js"></script>
+  <script defer src="static/js/hexap.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop has-text-centered">
+      <h1 class="title is-1 publication-title">Hexa-P: Physical Plausibility-aware Pre-training for Pedestrian Path Prediction</h1>
+      <div class="is-size-5 publication-authors">
+        <span class="author-block"><a href="https://iminthemiddle.github.io/" target="_blank">Hiromu Taketsugu</a><sup>1</sup>,</span>
+        <span class="author-block">Shohei Nobuhara<sup>2</sup>,</span>
+        <span class="author-block"><a href="https://www.toyota-ti.ac.jp/Lab/Denshi/iim/ukita/index.html" target="_blank">Norimichi Ukita</a><sup>1</sup></span>
+      </div>
+      <div class="is-size-6 publication-authors"><sup>1</sup>Toyota Technological Institute &middot; <sup>2</sup>Kyoto Institute of Technology</div>
+      <div class="is-size-5 publication-authors">Pattern Analysis and Applications, 2026</div>
+      <div class="publication-links">
+        <a class="button is-dark is-rounded" href="https://github.com/ImIntheMiddle/Hexa-P" target="_blank"><span class="icon"><i class="fab fa-github"></i></span><span>Code</span></a>
+        <a class="button is-dark is-rounded" href="https://huggingface.co/iminthemiddle/Hexa-P" target="_blank"><span class="icon">🤗</span><span>Weights &amp; Data</span></a>
+        <a class="button is-dark is-rounded" href="#bibtex"><span class="icon"><i class="fas fa-quote-right"></i></span><span>BibTeX</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section pt-0">
+  <div class="container is-max-desktop">
+    <div class="compare" id="compare">
+      <canvas id="compare-canvas"></canvas>
+      <div class="compare-handle" id="compare-handle"><span></span></div>
+      <span class="compare-tag left">Social-Trans</span>
+      <span class="compare-tag right">Hexa-P</span>
+      <video id="compare-video" muted loop playsinline preload="auto"></video>
+    </div>
+    <div class="chips" id="compare-chips"></div>
+    <p class="caption">Drag the divider. Both methods see only the last two frames (0.8 s) of a JRDB pedestrian and predict five paths for the next 4.8 s. Black: observed path, red: ground truth, dashed: predictions.</p>
+  </div>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Abstract</h2>
+    <div class="content has-text-justified">
+      <p>Pedestrian path prediction is a safety-critical component of autonomous vehicles and social robots that must navigate alongside humans in open urban environments. In such deployments, predictions that imply unnatural accelerations or impossible turns can directly trigger unsafe planning decisions, especially when only a few past frames of the pedestrian are observed. Because pedestrians are full-body humans whose paths are governed by articulated locomotion, we exploit two resources: 3D human body pose, which encodes locomotion-level constraints, and a humanoid physics simulator, which synthesizes virtually unlimited, physically executable pose-and-path data. We propose &ldquo;Physical Plausibility-aware Pre-training for Pedestrian Path Prediction&rdquo; (Hexa-P), which uses this synthesized data to jointly pre-train a path predictor and a plausibility estimator. Unlike prior work that uses a separately trained plausibility estimator, this joint pre-training improves both prediction accuracy and physical plausibility. While this simulation involves only a single agent, multiple agents mutually influence one another's future paths in real-world scenes. We therefore introduce an adapter-based fine-tuning that preserves physical knowledge while adapting to scene-specific social path interactions. We also propose Target-relative Positional Encoding (TaPE) to bridge the gap between single-agent simulation and multi-agent path prediction. Experiments on JRDB, JTA, and the Urban dataset demonstrate accurate and plausible predictions of Hexa-P. Particularly in safety-critical short-observation scenarios, Hexa-P reduces prediction errors by up to 50% on the JRDB dataset compared with a strong pose-aware baseline.</p>
+    </div>
+    <img src="static/images/overview.png" alt="Overview of Hexa-P: physics pre-training, adapter-based fine-tuning and dual-mode inference" class="figure">
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Fewer observed frames</h2>
+    <p class="lead">The same JRDB pedestrian with fewer observed frames. Left: Social-Trans, right: Hexa-P. The curve gives the ADE on the JRDB test split.</p>
+    <div class="tabs-row">
+      <div class="chips" id="obs-clips"></div>
+      <div class="chips" id="obs-tabs"></div>
+    </div>
+    <div class="rounds">
+      <video id="obs-video" muted loop playsinline autoplay></video>
+      <svg id="obs-curve" viewBox="0 0 320 228"></svg>
+    </div>
+  </div>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Physically executable paths</h2>
+    <p class="lead">The simulated humanoid of the pre-training walks the paths that Hexa-P predicts from its observed motion. Over 2,048 rollouts, it never falls and ends within 0.5 m of the predicted goal.</p>
+    <div class="grid" id="exec-grid"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Safer robot navigation</h2>
+    <p class="lead">A robot crosses replayed JTA crowds with a Social Force planner that avoids the predicted paths. Collision rate over 100 test episodes.</p>
+    <svg id="nav-chart" viewBox="0 0 640 200"></svg>
+    <div class="grid" id="nav-grid"></div>
+  </div>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">More results</h2>
+    <p class="lead">Randomly chosen test windows with two observed frames. Left: Social-Trans, right: Hexa-P.</p>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Paper</h2>
+    <div class="columns is-vcentered">
+      <div class="column is-4"><img src="static/images/paper.png" alt="First page of the paper" class="paper-thumb"></div>
+      <div class="column">
+        <p>Hiromu Taketsugu, Shohei Nobuhara and Norimichi Ukita. <b>Hexa-P: Physical Plausibility-aware Pre-training for Pedestrian Path Prediction.</b> Pattern Analysis and Applications, 2026.</p>
+        <p class="mt-3">Code, configurations and instructions to reproduce the experiments are on <a href="https://github.com/ImIntheMiddle/Hexa-P" target="_blank">GitHub</a>; weights and preprocessed data are on <a href="https://huggingface.co/iminthemiddle/Hexa-P" target="_blank">Hugging Face</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section hero is-light" id="bibtex">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">BibTeX <button class="copy" id="copy-bibtex" title="Copy"><i class="fa fa-copy"></i></button></h2>
+    <pre><code id="bibtex-code">@article{taketsugu2026hexap,
+  title   = {Hexa-P: Physical Plausibility-aware Pre-training for Pedestrian Path Prediction},
+  author  = {Taketsugu, Hiromu and Nobuhara, Shohei and Ukita, Norimichi},
+  journal = {Pattern Analysis and Applications},
+  year    = {2026}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="content has-text-centered is-size-7">
+    This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>, which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page. It is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+  </div>
+</footer>
+
+</body>
+</html>
