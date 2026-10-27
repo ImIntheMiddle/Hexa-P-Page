@@ -36,9 +36,9 @@ body { background: #fff; color: var(--ink); }
 .compare-tag.right { right: 10px; }
 
 /* round by round */
-.rounds { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 1.2rem; align-items: center; }
+.rounds { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; justify-items: center; }
 .rounds video { width: 100%; border-radius: 6px; background: #111; }
-#obs-curve { width: 100%; }
+#obs-curve { width: 100%; max-width: 420px; }
 #obs-curve text { font-size: 11px; fill: #555; }
 
 /* more results */
