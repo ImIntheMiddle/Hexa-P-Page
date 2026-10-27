@@ -120,7 +120,6 @@
     grid($("nav-grid"), DATA.navigation.videos || [], "navigation");
   })();
 
-  grid($("exec-grid"), DATA.executability, "executability");
   grid($("grid"), DATA.grid, "grid");
 
   $("copy-bibtex").addEventListener("click", () => {
