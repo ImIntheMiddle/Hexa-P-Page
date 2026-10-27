@@ -54,38 +54,14 @@
     });
   }
 
-  /* ---------------------------------------------------------------- before / after slider */
+  /* ---------------------------------------------------------------- teaser */
   (function compare() {
-    const box = $("compare"), canvas = $("compare-canvas"), video = $("compare-video"), handle = $("compare-handle");
-    const ctx = canvas.getContext("2d");
-    let split = 0.5, clip = null;
-    function load(key) {
-      clip = DATA.compare.find((c) => c.key === key);
-      canvas.width = clip.width;
-      canvas.height = clip.height;
+    const video = $("compare-video");
+    chips($("compare-chips"), DATA.compare.map((c) => [c.key, c.title]), (key) => {
       video.src = BASE + "compare/" + key + ".mp4";
       video.play().catch(() => {});
-    }
-    function draw() {
-      if (clip && video.readyState >= 2) {
-        const w = clip.width, h = clip.height, x = Math.max(1, Math.min(w - 1, Math.round(split * w)));
-        ctx.drawImage(video, 0, 0, x, h, 0, 0, x, h);
-        ctx.drawImage(video, x, h, w - x, h, x, 0, w - x, h);
-      }
-      requestAnimationFrame(draw);
-    }
-    function move(event) {
-      const r = box.getBoundingClientRect();
-      split = Math.max(0, Math.min(1, (event.clientX - r.left) / r.width));
-      handle.style.left = split * 100 + "%";
-    }
-    let dragging = false;
-    box.addEventListener("pointerdown", (e) => { dragging = true; box.setPointerCapture(e.pointerId); move(e); });
-    box.addEventListener("pointermove", (e) => { if (dragging) move(e); });
-    box.addEventListener("pointerup", () => { dragging = false; });
-    handle.style.left = "50%";
-    chips($("compare-chips"), DATA.compare.map((c) => [c.key, c.title]), load);
-    requestAnimationFrame(draw);
+      $("compare-ade").textContent = DATA.compare.find((c) => c.key === key).caption + ".";
+    });
   })();
 
   /* ---------------------------------------------------------------- observation length */
