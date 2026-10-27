@@ -57,5 +57,6 @@ pre code { font-size: .8rem; }
 
 /* Hexa-P */
 #nav-chart { width: 100%; margin-bottom: 1rem; }
+#nav-grid { grid-template-columns: minmax(0, 1fr); }
 #nav-chart text { font-size: 13px; fill: #444; }
 .grid figure video, .grid figure img { aspect-ratio: auto; }
