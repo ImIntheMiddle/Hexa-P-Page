@@ -31,15 +31,15 @@ body { background: #fff; color: var(--ink); }
 .compare-handle { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 6px rgba(0, 0, 0, .5); cursor: ew-resize; transform: translateX(-1px); }
 .compare-handle span { position: absolute; top: 50%; left: 50%; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; background: #fff; box-shadow: 0 1px 6px rgba(0, 0, 0, .4); }
 .compare-handle span::before { content: "\2039\00a0\203A"; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #333; }
-.compare-tag { position: absolute; top: 10px; padding: 2px 10px; border-radius: 4px; background: rgba(0, 0, 0, .6); color: #fff; font-size: .8rem; pointer-events: none; }
+.compare-tag { position: absolute; bottom: 10px; padding: 2px 10px; border-radius: 4px; background: rgba(0, 0, 0, .6); color: #fff; font-size: .8rem; pointer-events: none; }
 .compare-tag.left { left: 10px; }
 .compare-tag.right { right: 10px; }
 
 /* round by round */
 .rounds { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 1.2rem; align-items: center; }
 .rounds video { width: 100%; border-radius: 6px; background: #111; }
-#round-curve { width: 100%; }
-#round-curve text { font-size: 11px; fill: #555; }
+#obs-curve { width: 100%; }
+#obs-curve text { font-size: 11px; fill: #555; }
 
 /* more results */
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
@@ -60,6 +60,7 @@ pre code { font-size: .8rem; }
   .rounds, .grid { grid-template-columns: minmax(0, 1fr); }
   .publication-links .button { font-size: .85rem; }
   .has-text-justified { text-align: left !important; }
+  .publication-title { font-size: 2rem !important; }
 }
 
 /* Hexa-P */

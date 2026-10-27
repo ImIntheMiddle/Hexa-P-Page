@@ -104,13 +104,14 @@
       lengths.forEach((l, i) => { const t = svg("text", { x: X(i), y: 206, "text-anchor": "middle" }, curve); t.textContent = l; });
       const lab = svg("text", { x: 175, y: 222, "text-anchor": "middle" }, curve); lab.textContent = "observed frames";
       const yl = svg("text", { x: 50, y: 14 }, curve); yl.textContent = "ADE (m)";
-      Object.entries(obs.ade).forEach(([name, ys]) => {
+      Object.entries(obs.ade).forEach(([name, ys], k) => {
         const color = obs.colors[name];
         const pts = ys.map((a, i) => [X(i), Y(a)]);
         svg("polyline", { points: pts.map((q) => q.join(",")).join(" "), fill: "none", stroke: color, "stroke-width": 2 }, curve);
         pts.forEach(([x, y], i) => svg("circle", { cx: x, cy: y, r: lengths[i] === length ? 5 : 2.5, fill: color, stroke: lengths[i] === length ? "#222" : "none" }, curve));
-        const t = svg("text", { x: pts[pts.length - 1][0] - 4, y: pts[pts.length - 1][1] - 8, "text-anchor": "end", fill: color }, curve);
+        const t = svg("text", { x: 305, y: 34 + k * 18, "text-anchor": "end", fill: color }, curve);
         t.textContent = name;
+        t.style.fill = color;
       });
     }
     function loadLength(length) {
