@@ -61,6 +61,52 @@
   </div>
 </section>
 
+<section class="section dark-band" id="pretraining">
+  <div class="container is-max-desktop">
+    <p class="eyebrow">Stage 1 &middot; Pre-training in a physics simulator</p>
+    <h2 class="title is-2">Thousands of simulated humanoids teach Hexa&#8209;P how a body walks</h2>
+    <p class="lead">Recorded pedestrians only show paths that people happened to walk; they never show a path that a body cannot follow. Hexa-P therefore learns its motion prior in a physics simulator. In IsaacGym, a humanoid controller trained with reinforcement learning (PACER) walks randomly generated target paths, starting each episode from a motion-capture pose of AMASS. The simulator renders virtually unlimited, physically executable pose-and-path data, and Hexa-P pre-trains its Physical Core on it before it ever sees a real pedestrian.</p>
+    <div class="stats">
+      <div><b>4,096</b><span>humanoids simulated in parallel</span></div>
+      <div><b>1.36 B</b><span>simulated frames</span></div>
+      <div><b>2,000</b><span>pre-training episodes</span></div>
+      <div><b>21.7 h</b><span>on 8 A100 GPUs</span></div>
+    </div>
+    <video class="teaser" id="pretrain-overview" src="static/results/pretraining/overview.mp4" poster="static/results/pretraining/overview.jpg" muted loop playsinline autoplay></video>
+    <p class="caption">128 recorded rollouts replayed side by side, a small slice of one batch of 4,096. Each humanoid follows its own target path (green); red paths are those on which the humanoid falls.</p>
+    <div class="steps">
+      <div><span class="num">1</span><b>Sample a target path</b><p>Random speeds up to 5 m/s, accelerations up to 2 m/s&sup2; and turns at up to 180&deg;/s.</p></div>
+      <div><span class="num">2</span><b>Walk it under physics</b><p>The humanoid is rewarded for following the path with a natural, energy-efficient gait.</p></div>
+      <div><span class="num">3</span><b>Learn from the rollout</b><p>The observed motion, the path actually walked and the reward pre-train the Path-Head and the LocoVal-Head.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Learning what a body can and cannot do</h2>
+    <p class="lead">The simulator also shows which paths a body cannot follow. Each rollout earns a reward for tracking its path with a natural, energy-efficient gait, and a humanoid that falls earns little. The LocoVal-Head learns to predict this reward from the observed motion and a candidate path. After fine-tuning, the same head scores the paths that Hexa-P predicts for real pedestrians and filters out the implausible ones (LocoVal filtering).</p>
+    <video class="teaser" id="pretrain-label" src="static/results/pretraining/label.mp4" poster="static/results/pretraining/label.jpg" muted loop playsinline autoplay></video>
+    <div class="pair-captions">
+      <p><b class="ok">Walks its target path.</b> The walked path supervises the Path-Head, and the high reward tells the LocoVal-Head that this path is plausible.</p>
+      <p><b class="ng">Falls on a path with sudden turns.</b> The rollout is left out of the path loss, and its low reward teaches the LocoVal-Head what an implausible path looks like.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Predicted paths that a humanoid can actually walk</h2>
+    <p class="lead">Do the predictions obey the same physics? We hand the paths that the pre-trained Hexa-P predicts from the observed motion back to the simulated humanoid and let it walk them for 4.8 s. Over 2,048 rollouts it never falls and always ends within 0.5 m of the predicted goal, whereas paths extrapolated at constant velocity from the same observations make it fall in 59.3% of the rollouts.</p>
+    <div class="stats two">
+      <div><b>0.0%</b><span>falls on Hexa-P paths</span></div>
+      <div><b>100%</b><span>rollouts reach the predicted goal</span></div>
+      <div class="muted"><b>59.3%</b><span>falls on constant-velocity paths</span></div>
+    </div>
+    <div class="grid" id="exec-grid"></div>
+  </div>
+</section>
+
 <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3">Fewer observed frames</h2>
@@ -78,14 +124,6 @@
 
 <section class="section hero is-light">
   <div class="container is-max-desktop">
-    <h2 class="title is-3">Physically executable paths</h2>
-    <p class="lead">The physics-simulated humanoid of the pre-training walks the paths that Hexa-P predicts from its observed motion (green line, goal as a ball). Over 2,048 rollouts, it never falls and ends within 0.5 m of the predicted goal.</p>
-    <div class="grid" id="exec-grid"></div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
     <h2 class="title is-3">Safer robot navigation</h2>
     <p class="lead">A robot crosses replayed JTA crowds with a Social Force planner that avoids the predicted paths. Collision rate over 100 test episodes. In the videos, the people are drawn with their replayed 3D poses, thin lines connect each person to the positions predicted about 2 s ahead, and gray crosses mark the hypotheses that LocoVal rejects. The blue pole is the robot and the star is its goal.</p>
     <svg id="nav-chart" viewBox="0 0 640 200"></svg>
@@ -93,7 +131,7 @@
   </div>
 </section>
 
-<section class="section hero is-light">
+<section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3">More results</h2>
     <p class="lead">More test windows of walking pedestrians in JTA and JRDB where Hexa-P improves on Social-Trans, with two observed frames. Blue: Social-Trans, green: Hexa-P.</p>
@@ -101,7 +139,7 @@
   </div>
 </section>
 
-<section class="section" id="paper">
+<section class="section hero is-light" id="paper">
   <div class="container is-max-desktop">
     <h2 class="title is-3">Paper</h2>
     <div class="columns is-vcentered">
@@ -114,7 +152,7 @@
   </div>
 </section>
 
-<section class="section hero is-light" id="bibtex">
+<section class="section" id="bibtex">
   <div class="container is-max-desktop">
     <h2 class="title is-3">BibTeX <button class="copy" id="copy-bibtex" title="Copy"><i class="fa fa-copy"></i></button></h2>
     <pre><code id="bibtex-code">@article{taketsugu2026hexap,
@@ -125,6 +163,8 @@
 }</code></pre>
   </div>
 </section>
+
+
 
 <footer class="footer">
   <div class="content has-text-centered is-size-7">
