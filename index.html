@@ -47,7 +47,7 @@
   <div class="container is-max-desktop">
     <video class="teaser" id="compare-video" muted loop playsinline autoplay></video>
     <div class="chips" id="compare-chips"></div>
-    <p class="caption">Both methods see only the last two frames (0.8 s) of a JRDB pedestrian and predict five paths for the next 4.8 s. Black: observed path, red: ground truth, blue: Social-Trans, green: Hexa-P. <span id="compare-ade"></span></p>
+    <p class="caption">Both methods see only the last two frames (0.8 s) of a pedestrian in JTA (synthetic) or JRDB (real) and predict five paths for the next 4.8 s. Black: observed path, red: ground truth, blue: Social-Trans, green: Hexa-P. <span id="compare-ade"></span></p>
   </div>
 </section>
 
@@ -64,14 +64,14 @@
 <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3">Fewer observed frames</h2>
-    <p class="lead">The same JRDB pedestrian with fewer observed frames. Blue: Social-Trans, green: Hexa-P. The curve below gives the ADE on the JRDB test split.</p>
+    <p class="lead">The same pedestrian with fewer observed frames. Blue: Social-Trans, green: Hexa-P. The curve gives the ADE on the test split of the same dataset.</p>
     <div class="tabs-row">
       <div class="chips" id="obs-clips"></div>
       <div class="chips" id="obs-tabs"></div>
     </div>
     <div class="rounds">
       <video id="obs-video" muted loop playsinline autoplay></video>
-      <svg id="obs-curve" viewBox="0 0 320 228"></svg>
+      <svg id="obs-curve" viewBox="0 0 320 234"></svg>
     </div>
   </div>
 </section>
@@ -96,7 +96,7 @@
 <section class="section hero is-light">
   <div class="container is-max-desktop">
     <h2 class="title is-3">More results</h2>
-    <p class="lead">Randomly chosen test windows with two observed frames. Blue: Social-Trans, green: Hexa-P.</p>
+    <p class="lead">Randomly chosen test windows of walking pedestrians in JTA and JRDB, with two observed frames. Blue: Social-Trans, green: Hexa-P.</p>
     <div class="grid" id="grid"></div>
   </div>
 </section>

@@ -70,34 +70,35 @@
     let clip = null;
     function drawCurve(length) {
       curve.innerHTML = "";
-      const lengths = obs.lengths;
-      const values = Object.values(obs.ade).flat();
+      const { lengths, ade } = obs.curves[clip.dataset];
+      const values = Object.values(ade).flat();
       const top = Math.ceil(Math.max(...values) * 10) / 10;
-      const X = (i) => 46 + (i / (lengths.length - 1)) * 255, Y = (a) => 190 - (a / top) * 170;
-      svg("line", { x1: 46, y1: 190, x2: 305, y2: 190, stroke: "#bbb" }, curve);
-      svg("line", { x1: 46, y1: 20, x2: 46, y2: 190, stroke: "#bbb" }, curve);
+      const X = (i) => 46 + (i / (lengths.length - 1)) * 255, Y = (a) => 196 - (a / top) * 156;
+      svg("line", { x1: 46, y1: 196, x2: 305, y2: 196, stroke: "#bbb" }, curve);
+      svg("line", { x1: 46, y1: 40, x2: 46, y2: 196, stroke: "#bbb" }, curve);
       [0, top / 2, top].forEach((a) => { const t = svg("text", { x: 40, y: Y(a) + 4, "text-anchor": "end" }, curve); t.textContent = a.toFixed(1); });
-      lengths.forEach((l, i) => { const t = svg("text", { x: X(i), y: 206, "text-anchor": "middle" }, curve); t.textContent = l; });
-      const lab = svg("text", { x: 175, y: 222, "text-anchor": "middle" }, curve); lab.textContent = "observed frames";
-      const yl = svg("text", { x: 50, y: 14 }, curve); yl.textContent = "ADE (m)";
-      Object.entries(obs.ade).forEach(([name, ys], k) => {
+      lengths.forEach((l, i) => { const t = svg("text", { x: X(i), y: 212, "text-anchor": "middle" }, curve); t.textContent = l; });
+      const lab = svg("text", { x: 175, y: 228, "text-anchor": "middle" }, curve); lab.textContent = "observed frames (" + clip.dataset + " test set)";
+      const yl = svg("text", { x: 4, y: 14 }, curve); yl.textContent = "ADE (m)";
+      Object.entries(ade).forEach(([name, ys], k) => {
         const color = obs.colors[name];
         const pts = ys.map((a, i) => [X(i), Y(a)]);
         svg("polyline", { points: pts.map((q) => q.join(",")).join(" "), fill: "none", stroke: color, "stroke-width": 2 }, curve);
         pts.forEach(([x, y], i) => svg("circle", { cx: x, cy: y, r: lengths[i] === length ? 5 : 2.5, fill: color, stroke: lengths[i] === length ? "#222" : "none" }, curve));
-        const t = svg("text", { x: 305, y: 34 + k * 18, "text-anchor": "end", fill: color }, curve);
+        const t = svg("text", { x: 305 - k * 90, y: 14, "text-anchor": "end", fill: color }, curve);
         t.textContent = name;
         t.style.fill = color;
       });
     }
     function loadLength(length) {
-      video.src = BASE + "observation/" + clip + "/obs_" + length + ".mp4";
+      video.src = BASE + "observation/" + clip.key + "/obs_" + length + ".mp4";
       video.play().catch(() => {});
       drawCurve(length);
     }
     function loadClip(key) {
-      clip = key;
-      chips($("obs-tabs"), obs.lengths.map((l) => [l, l + (l === 1 ? " frame" : " frames")]), loadLength, 2);
+      clip = obs.clips.find((c) => c.key === key);
+      const lengths = obs.curves[clip.dataset].lengths;
+      chips($("obs-tabs"), lengths.map((l) => [l, l + (l === 1 ? " frame" : " frames")]), loadLength, 2);
     }
     chips($("obs-clips"), obs.clips.map((c) => [c.key, c.title]), loadClip);
   })();
