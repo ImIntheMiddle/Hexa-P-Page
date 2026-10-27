@@ -46,9 +46,12 @@
     items.forEach((c) => {
       const fig = document.createElement("figure");
       const v = lazyVideo(BASE + folder + "/" + c.key + ".mp4", BASE + folder + "/" + c.key + ".jpg");
-      const cap = document.createElement("figcaption");
-      cap.textContent = c.title;
-      fig.append(v, cap);
+      fig.append(v);
+      if (c.title) {
+        const cap = document.createElement("figcaption");
+        cap.textContent = c.title;
+        fig.append(cap);
+      }
       container.appendChild(fig);
       watch.observe(v);
     });
@@ -60,7 +63,6 @@
     chips($("compare-chips"), DATA.compare.map((c) => [c.key, c.title]), (key) => {
       video.src = BASE + "compare/" + key + ".mp4";
       video.play().catch(() => {});
-      $("compare-ade").textContent = DATA.compare.find((c) => c.key === key).caption + ".";
     });
   })();
 
